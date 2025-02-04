@@ -1,0 +1,51 @@
+import socket
+
+def main():
+    # Настройка сокета для подключения к серверу
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect(('192.168.1.145', 12345))  # Подключение к локальному серверу
+
+    # Запрашиваем AUIN пользователя
+    my_auin = input("Введите ваш AstroUIN: ")
+    client_socket.send(my_auin.encode('utf-8'))  # Отправляем серверу свой AUIN
+
+    # Получение ответа от сервера
+    response = client_socket.recv(1024).decode('utf-8')
+    print(response)  # Печатаем ответ сервера
+
+    # Проверяем, надо ли регистрироваться
+    if response.startswith("Данный AstroUIN не существует"):
+        register_decision = input("Хотите зарегистрировать ваш AstroUIN? (да/нет): ")
+        client_socket.send(register_decision.encode('utf-8'))  # Отправляем решение серверу
+        response = client_socket.recv(1024).decode('utf-8')  # Получаем ответ
+        print(response)  # Печатаем новый AUIN или сообщение об отмене
+
+    # Если AUIN существует, продолжаем общение
+    if response.startswith("Ваш новый AstroUIN") or my_auin in response:
+        while True:
+            try:
+                interlocutor_auin = input("Введите AstroUIN собеседника: ")
+                # Проверка, действительно ли AUIN зарегистрирован
+                if interlocutor_auin not in registered_auins:
+                    print("Ошибка: собеседник не зарегистрирован.")
+                    continue  # Пропускаем итерацию, чтобы запросить AUIN снова
+
+                message = input(f"Введите сообщение для {interlocutor_auin} (или 'exit' для выхода): ")
+                if message.lower() == 'exit':
+                    break
+
+                full_message = f"{interlocutor_auin}:{message}"
+                client_socket.send(full_message.encode('utf-8'))
+
+                # Ожидание ответа (если требуется)
+                response = client_socket.recv(1024).decode('utf-8')
+                print("Ответ от собеседника:", response)
+            except Exception as e:
+                print(f"Произошла ошибка: {e}")
+                breakz
+
+    # Закрываем сокет при выходе
+    client_socket.close()
+
+if __name__ == "__main__":
+    main()
