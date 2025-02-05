@@ -1,9 +1,23 @@
 import socket
+import threading
+
+def receive_messages(client_socket):
+    """Функция для получения и отображения сообщений от других клиентов."""
+    while True:
+        try:
+            message = client_socket.recv(1024).decode('utf-8')
+            if message:
+                print("Новое сообщение:", message)
+            else:
+                break  # Если ничего не получаем, выходим
+        except Exception as e:
+            print(f"Произошла ошибка при получении сообщения: {e}")
+            break
 
 def main():
     # Настройка сокета для подключения к серверу
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(('192.168.1.145', 12345))  # Подключение к локальному серверу
+    client_socket.connect(('192.168.1.145', 12345))  # Подключение к серверу
 
     # Запрашиваем AUIN пользователя
     my_auin = input("Введите ваш AstroUIN: ")
@@ -22,6 +36,9 @@ def main():
 
     # Если AUIN существует, продолжаем общение
     if "Ваш новый AstroUIN зарегистрирован" in response or "Добро пожаловать!" in response:
+        # Запускаем поток для получения сообщений
+        threading.Thread(target=receive_messages, args=(client_socket,), daemon=True).start()
+
         while True:
             try:
                 interlocutor_auin = input("Введите AstroUIN собеседника: ")
@@ -32,9 +49,7 @@ def main():
                 full_message = f"{interlocutor_auin}:{message}"
                 client_socket.send(full_message.encode('utf-8'))
 
-                # Ожидание ответа (если требуется)
-                response = client_socket.recv(1024).decode('utf-8')
-                print("Ответ от собеседника:", response)
+                # Не ждем ответа, так как поток получения сообщений будет обрабатывать их
             except Exception as e:
                 print(f"Произошла ошибка: {e}")
                 break
