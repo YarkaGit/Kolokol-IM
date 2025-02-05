@@ -14,22 +14,17 @@ def main():
     print(response)  # Печатаем ответ сервера
 
     # Проверяем, надо ли регистрироваться
-    if response.startswith("Данный AstroUIN не существует"):
+    if "Хотите зарегистрировать ваш AstroUIN?" in response:
         register_decision = input("Хотите зарегистрировать ваш AstroUIN? (да/нет): ")
         client_socket.send(register_decision.encode('utf-8'))  # Отправляем решение серверу
         response = client_socket.recv(1024).decode('utf-8')  # Получаем ответ
         print(response)  # Печатаем новый AUIN или сообщение об отмене
 
     # Если AUIN существует, продолжаем общение
-    if response.startswith("Ваш новый AstroUIN") or my_auin in response:
+    if "Ваш новый AstroUIN зарегистрирован" in response or "Добро пожаловать!" in response:
         while True:
             try:
                 interlocutor_auin = input("Введите AstroUIN собеседника: ")
-                # Проверка, действительно ли AUIN зарегистрирован
-                if interlocutor_auin not in registered_auins:
-                    print("Ошибка: собеседник не зарегистрирован.")
-                    continue  # Пропускаем итерацию, чтобы запросить AUIN снова
-
                 message = input(f"Введите сообщение для {interlocutor_auin} (или 'exit' для выхода): ")
                 if message.lower() == 'exit':
                     break
