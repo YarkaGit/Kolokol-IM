@@ -9,8 +9,8 @@ AstroMSG — онлайн-текстовый мессенджер Python.
 
 AstroMSG - online Python Text Messenger.
 How to use(How 2 use):
-1. Download 2 file: "client.py".
-2. Open “client.py” with any IDE (terminal may not work)
-3. Create a launch configuration in your IDE.
+1. Download file: "client.py".
+3. Open “client.py” with any IDE (terminal may not work)
+4. Create a launch configuration in your IDE.
 Voila! Now you just need to register your AUIN(AstroUIN) and start talking!
 (ver alpha 0.001)
