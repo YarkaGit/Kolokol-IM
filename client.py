@@ -29,7 +29,7 @@ def main():
 
     # Проверяем, надо ли регистрироваться
     if "Хотите зарегистрировать ваш AstroUIN?" in response:
-        register_decision = input("")
+        register_decision = input("Введите 'yes' для регистрации или 'no' для отмены: ")
         client_socket.send(register_decision.encode('utf-8'))  # Отправляем решение серверу
         response = client_socket.recv(1024).decode('utf-8')  # Получаем ответ
         print(response)  # Печатаем новый AUIN или сообщение об отмене
@@ -39,9 +39,11 @@ def main():
         # Запускаем поток для получения сообщений
         threading.Thread(target=receive_messages, args=(client_socket,), daemon=True).start()
 
+        # Запрашиваем AUIN собеседника один раз
+        interlocutor_auin = input("Введите AstroUIN собеседника: ")
+
         while True:
             try:
-                interlocutor_auin = input("Введите AstroUIN собеседника: ")
                 message = input(f"Введите сообщение для {interlocutor_auin} (или 'exit' для выхода): ")
                 if message.lower() == 'exit':
                     break
