@@ -42,7 +42,7 @@ def main():
                 print("Ответ от собеседника:", response)
             except Exception as e:
                 print(f"Произошла ошибка: {e}")
-                breakz
+                break
 
     # Закрываем сокет при выходе
     client_socket.close()
