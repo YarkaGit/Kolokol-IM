@@ -27,7 +27,7 @@ def main():
 
     # Проверяем, надо ли регистрироваться
     if "Хотите зарегистрировать ваш AstroUIN?" in response:
-        register_decision = input("Введите 'yes' для регистрации или 'no' для отмены: ")
+        register_decision = input("Введите 'Да' для регистрации или 'Нет' для отмены: ")
         client_socket.send(register_decision.encode('utf-8'))  # Отправляем решение серверу
         response = client_socket.recv(1024).decode('utf-8')  # Получаем ответ
         print(response)  # Печатаем новый AUIN или сообщение об отмене
