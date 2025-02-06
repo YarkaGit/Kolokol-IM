@@ -8,8 +8,6 @@ def receive_messages(client_socket):
             message = client_socket.recv(1024).decode('utf-8')
             if message:
                 print("Новое сообщение:", message)
-            else:
-                break  # Если ничего не получаем, выходим
         except Exception as e:
             print(f"Произошла ошибка при получении сообщения: {e}")
             break
