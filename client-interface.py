@@ -16,11 +16,6 @@ class ChatClient:
         self.master.title("Kolokol")
         self.master.geometry("350x300")  # Установка размера окна
 
-        # Путь к иконке
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-        icon_path = os.path.join(current_directory, 'icon.ico')  # Укажите имя вашего файла иконки
-        self.master.iconbitmap(icon_path)  # Установка иконки
-
         self.client_socket = None
         self.my_auin = ''
 
