@@ -41,7 +41,7 @@ class ChatClient:
         self.open_chat_button.pack(side=tk.LEFT, padx=5)
 
         # Кнопка добавления контакта
-        self.add_contact_button = Button(button_frame, text="Добавить контакт/Add Contact", command=self.add_contact, state=tk.DISABLED)
+        self.add_contact_button = Button(button_frame, text="Добавить контакт/Add Contact", command=self.add_contact_prompt, state=tk.DISABLED)
         self.add_contact_button.pack(side=tk.LEFT, padx=5)
 
         # Проверка наличия файла контактов
@@ -87,6 +87,17 @@ class ChatClient:
             with open(self.contacts_file, "w") as f:
                 f.write(self.my_auin + "\n")
                 f.write("contactlist_end\n")  # Обязательно добавляем конец контакт-листа
+
+
+
+    def add_contact_prompt(self):
+        """Запрос на добавление нового контакта."""
+        new_contact = simpledialog.askstring("Добавить контакт/Add Contact", "Введите новый контакт/Input new contact:")
+        
+        if new_contact and new_contact.strip():
+            self.add_contact(new_contact)  # Передаем new_contact в метод add_contact
+        else:
+            messagebox.showwarning("Ошибка", "Контакт не может быть пустым.")  # Сообщение об ошибке
 
     def add_contact(self, new_contact):
         # Считываем текущий контакт-лист
